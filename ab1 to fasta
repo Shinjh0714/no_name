@@ -1,0 +1,17 @@
+python
+from Bio import SeqIO
+import os
+dl = os.listdir()
+for i in dl:
+  ab = SeqIO.read(i,"abi")
+  SeqIO.write(ab,i.replace(".ab1",".fas"),"fasta")
+  
+primer : R >> reverse complement + fasta
+
+rv = [ i for i in dl if i.endwsith("_R.ab1")]
+for i in rv:
+  ab = SeqIO.read(i."abi")
+  rvab = ab.reverse_complement()
+  SeqIO.write(rvab,i.replace("_R.ab1","R_Rv.fas"),"fasta")
+  
+  
