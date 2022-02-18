@@ -1,0 +1,83 @@
+blastn : Nucleotide sequence 간의 비교
+tblastx : Query nucleotide sequence와 nucleotide sequence DB를 6frame으로 변환 후 비교
+blastx : Query nucleotide sequence를 6frame으로 변환 후 Protein sequence DB와 비교
+blastp : Protein sequence 간의 비교
+tblastn : Nucleotide sequence DB를 6frame으로 변환 후 query Protein sequence와 비교
+
+명령어 비교 #
+BLAST	       BLAST+	                Description
+blastall  	blastn, blastp, ...   	BLAST - 'blastall -p start command' / BLAST+ - 'start command'
+-p	        n/a                     BLAST program: blastn, blastp, blastx, tblastn, ...
+-i	        -query	                Input sequence file
+-d	        -db	                    BLAST database
+-o	        -out                  	Output file
+-m	       -outfmt	                Output format: BLAST XML:7 TAB:8 / BLAST+ XML:5 TAB:7
+-e	         -evalue               	Expectation value threshold
+-a	         -num_threads	           Number of CPU cores to use
+-F F	        -dust no / -seg no	    Disable low complexity filtering: DNA:dust AA:seg
+
+
+BLAST		
+-m		
+0 = pairwise		
+1 = query-anchored showing identities		
+2 = query-anchored no identities		
+3 = flat query-anchored, show identities		
+4 = flat query-anchored, no identities		
+5 = query-anchored no identities and blunt ends		
+6 = flat query-anchored, no identities and blunt ends		
+7 = XML Blast output		
+8 = tabular		
+9 = tabular with comment lines		
+10 = ASN, text		
+11 = ASN, binary [Integer]
+
+
+BLAST+		
+-outfmt		
+0 = pairwise		
+1 = query-anchored showing identities		
+2 = query-anchored no identities		
+3 = flat query-anchored, show identities		
+4 = flat query-anchored, no identities		
+5 = XML Blast output		
+6 = tabular		
+7 = tabular with comment lines		
+8 = Text ASN.1		
+9 = Binary ASN.1		
+10 = Comma-separated values		
+11 = BLAST archive format (ASN.1)		
+
+
+BLAST	          BLAST+	                Description
+formatdb	      makeblastdb	
+-i	            -in	                    Input sequence file
+-p T/F	        -dbtype prot/nucl	      Molecule type
+-o T	          -parse_seqids	          Parse and index sequence IDs
+-n	            -out	                  Base name for output files
+                -mask_data	            masking process - masker programe / masking을 사용시 활용
+                -mask_file_sz	          1GB / 2GB / ... - file size , size를 지정하지 않으면 1GB로 분할됨
+                
+                
+makblastdb(formatdb) 생성의 예시
+* BLAST+
+makeblastdb -in <input.fasta> -input_type <fasta> -dbtype {nucl|prot} -parse_seqids -hash_index -mask_data {dustmasker/segmasker/windowmasker} -max_file_sz {1GB/2GB/...}
+
+* BLAST
+formatdb -i nr -n ../../newest_blast/blast/nr -p T -L zebrafish -F zebrafish.gi -t "My zebrafish database"
+
+blast 실행 예시
+* BLAST+
+blastn -query <input.fasta> -db <blastdb or formatdb> -out <output.file> -evalue <e-value> -outfmt {0/1/..11} -num_threads <number thread>
+
+* BLAST
+blastall -p blastn -d zebrafish -i MYQUERY -o MYOUTPUT
+
+BLAST 결과 파일 포맷 변환 #
+BLAST+에서만 지원되는 것으로 확인되는 blast_formatter라는 프로그램을 이용하면 하나의 결과 파일을 다양한 포맷 (위의 output 모드 참고)으로 변환이 가능하다. 단 주의할 점은 처음 BLAST (BLAST+) 수행시 output 모드를 asn 포맷으로 지정해 주어야 한다는 점이다 (-m 11).
+
+blast_formatter의 예시는 다음과 같다. -outfmt에서 입력받는 값은 BLAST+의 -m (-outfmt)와 동일하게 작용한다.
+blast_formatter -archive [output].asn -outfmt 6 -out [output].tabular
+
+
+
