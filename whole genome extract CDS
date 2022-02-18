@@ -1,0 +1,35 @@
+python
+locate whole genome file.
+
+from Bio import SeqIO
+import os
+os.listdir()
+
+gb_file = "X_wholegeneome.gb"
+gb = SeqIO.read(gb_file,"gb")
+
+gb.features
+
+gb.features[XX].type > 'CDS'
+
+CDS_list = []
+
+for i in gb.features:
+  if i.type == "CDS":
+    CDS_list.append(i)
+    
+CDS_list
+
+len(CDS_list)
+search_query = "dnaA"
+for i in gb.features:
+  if i.type == "CDS":
+    try:
+      if "dnaA" in i.qualifiers['gene']:
+        print(i)
+      except:
+        pass
+        
+        
+
+
