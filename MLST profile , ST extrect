@@ -1,0 +1,10 @@
+first, copy MLST profile paste to text.
+
+  for i in {start..end}; do echo ST$i; done 
+  for i in {1..688}; do echo ST$i; done > XXX_ST.txt
+  
+  
+    cat Cf_id.txt | sed 's/<.*) //g'
+  cat Cf_id.txt | sed 's/<.*) //g' | sed 's/<\/option>//g'
+  cat Cf_id.txt | sed 's/<.*) //g' | sed 's/<\/option>//g' > Cf_id.txt2
+  mv Cf_id.txt2 Cf_id.txt
