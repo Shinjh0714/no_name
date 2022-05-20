@@ -1,0 +1,27 @@
+# setup
+library : bio3d,
+linux path /usr/bin "muscle"
+
+#start base
+library(bio3d)
+setwd("/~ in pdb folder")
+pdbfiles <- list.files(pattern = "*.pdb", full.names = TRUE)
+pdb <- lapply(pdbfiles, read.pdb)
+
+# Extract and align the chain 
+pdbs <- pdbaln(pdb, exefile = 'msa')
+
+#Calculate sequence identity
+pdbs$id <- basename.pdb(pdb$id)
+seqidentity(pdbs)
+
+#Calculate RMSD
+rmsd(pdbs, fit = TURE)
+
+#PCA (two ways)
+
+1. pca1 <- pca(pdbfit(pdbs), rm.gaps = TRUE)
+2. pca2 <- pca(pdbs, rm.gaps = TRUE)
+
+if Error in pca.xyz ~
+input XYZ,  XYZ : pca.xyz(xyz) -> pca.xyz(xyz = pdbfit(pdbs))
