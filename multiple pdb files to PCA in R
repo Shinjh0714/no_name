@@ -25,3 +25,6 @@ rmsd(pdbs, fit = TURE)
 
 if Error in pca.xyz ~
 input XYZ,  XYZ : pca.xyz(xyz) -> pca.xyz(xyz = pdbfit(pdbs))
+
+
+plot(pca1 or pca2)
