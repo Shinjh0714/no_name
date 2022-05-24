@@ -1,6 +1,7 @@
 # setup
 library : bio3d,
 linux path /usr/bin "muscle"
+R package : bioconductor('msa')  < BiocManager previous install.
 
 #start base
 library(bio3d)
