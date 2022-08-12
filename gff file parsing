@@ -1,0 +1,94 @@
+# feature 개수
+import sys, os
+f=open('FILE.gff',"r")
+dic={}
+# feature type
+for l in f:
+     if l.startswith("#"):
+             continue
+     elif l.startswith(">"):
+             break
+     else:
+             i=l.strip().split("\t")
+             feature=i[2]
+             dic.setdefault(feature,0)
+             dic[feature]+=1
+
+for key,value in dic.items():
+        print(key+":"+str(value))
+
+f.close()
+# gene의 하위 개수
+import sys, os
+
+f=open('fixstart_1st_polished.gff',"r")
+dic={}
+
+for l in f:
+        if l.startswith("#"):
+                continue
+        elif l.startswith(">"):
+                break
+        else:
+                i=l.strip().split("\t")
+                attribute=i[8].split(";")
+                for ii in attribute:
+                        if ii.startswith("Parent="):
+                                parent=ii.replace("Parent=","")
+                                dic.setdefault(parent,0)
+                                dic[parent]+=1
+
+for key,value in dic.items():
+        print(key+":"+str(value))
+
+f.close()
+
+#CDS의 평균 길이
+import os, sys
+f=open('fixstart_1st_polished.gff',"r")
+list = []
+for l in f:
+        if l.startswith("#"):
+                continue
+        elif l.startswith(">"):
+                break
+        else:
+                i=l.strip().split("\t")
+                if i[2]=="CDS":
+                        start=i[3]
+                        end=i[4]
+                        length=int(end)-int(start)+1
+                        list.append(length)
+
+
+print(sum(list)/len(list))
+f.close()
+
+# gff file을 table로 재구성
+
+import os,sys
+f=open('fixstart_1st_polished.gff',"r")
+list = []
+for l in f:
+    if l.startswith("#"):
+        continue
+    elif l.startswith(">"):
+        break
+    else:
+        i=l.strip().split("\t")
+        name=i[0]
+        feature=i[2]
+        start=i[3]
+        end=i[4]
+        attribute=i[8].split(",")
+        product=""
+        parent=""
+    for ii in attribute:
+        if ii.startswith("product="):
+            product=ii.replace("product=","")
+        elif ii.startswith("Parent="):
+            parent=ii.replace("Parent=","")
+    content=f"{name}\t{feature}\t{start}\t{end}\t{parent}\t{product}"
+    print(content)
+
+f.close()
