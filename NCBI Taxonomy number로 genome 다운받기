@@ -1,0 +1,33 @@
+NCBI Taxonomy number로 genome 다운받기
+
+from Bio import Entrez
+
+# NCBI에서 데이터를 검색하고 다운로드하기 위한 사용자 이메일 설정
+Entrez.email = "your.email@example.com"
+
+def download_genome(tax_id):
+    # Taxonomy ID를 사용하여 nucleotide 데이터베이스에서 검색
+    search_handle = Entrez.esearch(db="nucleotide", term=f"txid{tax_id}[Organism] AND complete genome", retmode="xml")
+    search_results = Entrez.read(search_handle)
+    search_handle.close()
+
+    # 검색 결과에서 accession number를 가져옴
+    accession_list = search_results["IdList"]
+    if not accession_list:
+        print("No complete genomes found for the given taxonomy ID.")
+        return
+    
+    # Accession number를 사용하여 각각의 sequence 데이터를 다운로드
+    for accession in accession_list:
+        fetch_handle = Entrez.efetch(db="nucleotide", id=accession, rettype="fasta", retmode="text")
+        fasta_data = fetch_handle.read()
+        fetch_handle.close()
+
+        # 파일로 저장
+        filename = f"{accession}.fasta"
+        with open(filename, "w") as file:
+            file.write(fasta_data)
+        print(f"Downloaded {filename}")
+
+# 사용 예
+download_genome(440524)
