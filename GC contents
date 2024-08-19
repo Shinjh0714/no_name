@@ -1,0 +1,30 @@
+import glob
+from Bio import SeqIO
+from Bio.SeqUtils import GC
+
+# 현재 디렉토리의 모든 fasta 파일을 찾습니다.
+fasta_files = glob.glob('./*.fasta')
+
+# 각 fasta 파일의 GC content를 저장할 딕셔너리
+gc_contents = {}
+
+# 각 fasta 파일에 대해 반복
+for fasta_file in fasta_files:
+    # 파일 내 모든 sequences의 GC content 계산
+    gc_content_list = []
+    for record in SeqIO.parse(fasta_file, "fasta"):
+        gc_content = GC(record.seq)
+        gc_content_list.append(gc_content)
+    
+    # 평균 GC content 계산
+    avg_gc_content = sum(gc_content_list) / len(gc_content_list)
+    
+    # 파일 이름에서 경로와 확장자를 제거하여 균주 이름만 추출
+    genome_name = fasta_file.split('/')[-1].split('.fasta')[0]
+    
+    # 균주 이름과 평균 GC content를 딕셔너리에 저장
+    gc_contents[genome_name] = avg_gc_content
+
+# 결과를 출력
+for genome_name, avg_gc_content in gc_contents.items():
+    print(f'Average GC content of {genome_name}: {avg_gc_content:.2f}%')
