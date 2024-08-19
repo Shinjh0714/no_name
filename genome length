@@ -1,0 +1,11 @@
+from Bio import SeqIO
+
+# Fasta 파일 경로 설정
+fasta_file = 'path_to_your_assembly_fasta.fasta'
+
+# 총 길이 계산
+total_length = 0
+for record in SeqIO.parse(fasta_file, "fasta"):
+    total_length += len(record.seq)
+
+print(f'Total length of the genome in {fasta_file}: {total_length}')
