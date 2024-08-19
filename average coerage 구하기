@@ -1,0 +1,27 @@
+average coerage 
+
+
+import pandas as pd
+
+# 첫 번째 이미지에서 coverage 데이터를 읽어옵니다.
+# 이 예에서는 데이터가 이미 CSV 형식으로 되어 있다고 가정합니다.
+coverage_data = pd.read_csv('coverage_data.csv')
+
+# 균주별로 평균 coverage 계산
+coverage_data['Average_Coverage'] = coverage_data.groupby('Genome_ID')['Coverage'].transform('mean')
+
+# 중복 제거하여 각 균주별로 한 줄씩만 나오게 함
+coverage_summary = coverage_data[['Genome_ID', 'Average_Coverage']].drop_duplicates()
+
+# 여기에 total length와 GC content를 추가해야 합니다.
+# 이 데이터를 추가하기 위해선 해당 값을 계산하여 coverage_summary에 추가해야 합니다.
+
+# 예를 들어, total length와 GC content가 계산된 데이터프레임이 있다고 가정하고 추가합니다.
+# total_length_data = pd.read_csv('total_length.csv')
+# gc_content_data = pd.read_csv('gc_content.csv')
+
+# 데이터를 병합합니다.
+# final_table = coverage_summary.merge(total_length_data, on='Genome_ID').merge(gc_content_data, on='Genome_ID')
+
+# 최종 테이블을 CSV 파일로 저장합니다.
+# final_table.to_csv('final_genomic_properties_table.csv', index=False)
