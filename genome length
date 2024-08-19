@@ -1,11 +1,25 @@
+import glob
 from Bio import SeqIO
 
-# Fasta 파일 경로 설정
-fasta_file = 'path_to_your_assembly_fasta.fasta'
+# 현재 디렉토리의 모든 fasta 파일을 찾습니다.
+fasta_files = glob.glob('./*.fasta')
 
-# 총 길이 계산
-total_length = 0
-for record in SeqIO.parse(fasta_file, "fasta"):
-    total_length += len(record.seq)
+# 각 fasta 파일의 총 길이를 저장할 딕셔너리
+genome_lengths = {}
 
-print(f'Total length of the genome in {fasta_file}: {total_length}')
+# 각 fasta 파일에 대해 반복
+for fasta_file in fasta_files:
+    # 총 길이 계산
+    total_length = 0
+    for record in SeqIO.parse(fasta_file, "fasta"):
+        total_length += len(record.seq)
+    
+    # 파일 이름에서 경로와 확장자를 제거하여 균주 이름만 추출
+    genome_name = fasta_file.split('/')[-1].split('.fasta')[0]
+    
+    # 균주 이름과 길이를 딕셔너리에 저장
+    genome_lengths[genome_name] = total_length
+
+# 결과를 출력
+for genome_name, total_length in genome_lengths.items():
+    print(f'Total length of the genome {genome_name}: {total_length}')
