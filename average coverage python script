@@ -1,0 +1,8 @@
+for file in *_coverage.txt; do
+    # Get total coverage and number of positions using awk
+    read total_coverage positions < <(awk '{sum+=$3} END {print sum, NR}' $file)
+
+    # Calculate average coverage
+    avg_coverage=$(echo "$total_coverage / $positions" | bc -l)
+    printf "Average coverage for %s: %f\n" "${file%_coverage.txt}" "$avg_coverage"
+done
