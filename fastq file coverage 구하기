@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Reference genome 파일 경로 설정
+REFERENCE="path_to_your_reference_genome.fasta"
+
+# BWA로 reference indexing (이미 했다면 생략 가능)
+bwa index $REFERENCE
+
+# 디렉토리 내 모든 fastq 파일에 대해 반복
+for i in $(ls *1.fastq); do
+    # 파일 이름에서 균주 ID 추출
+    ID=${i%%_*}
+    
+    # Paired-end 파일 이름 설정
+    F1=${ID}_1.fastq
+    F2=${ID}_2.fastq
+    
+    # BWA를 사용하여 mapping
+    bwa mem $REFERENCE $F1 $F2 > ${ID}_aligned_reads.sam
+    
+    # SAM 파일을 BAM으로 변환하고 정렬
+    samtools view -bS ${ID}_aligned_reads.sam | samtools sort -o ${ID}_sorted_aligned_reads.bam
+    
+    # Index the BAM file (for faster processing with other tools)
+    samtools index ${ID}_sorted_aligned_reads.bam
+    
+    # Calculate coverage
+    samtools depth ${ID}_sorted_aligned_reads.bam > ${ID}_coverage.txt
+    
+    # Coverage 결과를 출력
+    echo "Coverage for $ID calculated."
+done
+
+echo "All done."
