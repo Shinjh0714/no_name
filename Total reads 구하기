@@ -1,0 +1,4 @@
+for file in *.fastq; do
+  total_reads=$(echo $(cat $file | wc -l) / 4 | bc)
+  echo "Total reads in $file: $total_reads"
+done
