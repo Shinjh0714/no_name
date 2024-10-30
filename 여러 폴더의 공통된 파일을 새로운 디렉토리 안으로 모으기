@@ -1,0 +1,86 @@
+현재 디렉토리 안에 spades_output_FG_31XX, spades_output_FG_32XX 라는 디렉토리가 매우 많은 상황
+각 디렉토리 안에 contigs.fasta 파일들이 필요하고, 이 fasta file들의 이름을 각 폴더의 이름으로 바꾸고 싶음
+============================================================================================================
+import os
+import shutil
+
+# Define the base directory containing all `spades_output_FG_31XX` folders
+base_dir = "path/to/your/base_directory"  # Update this path to your base directory
+
+# Loop through each folder in the base directory
+for folder_name in os.listdir(base_dir):
+    # Check if the folder name starts with 'spades_output_FG_31'
+    if folder_name.startswith("spades_output_FG_31") or folder_name.startswith("spades_output_FG_32"):
+        folder_path = os.path.join(base_dir, folder_name)
+        
+        # Define the path to the original `contigs.fasta` file
+        original_contigs_path = os.path.join(folder_path, "contigs.fasta")
+        
+        # Check if `contigs.fasta` exists in this directory
+        if os.path.exists(original_contigs_path):
+            # Create a new name based on the folder name
+            new_contigs_name = f"{folder_name}.fasta"
+            new_contigs_path = os.path.join(folder_path, new_contigs_name)
+            
+            # Copy the original `contigs.fasta` to the new file with the updated name
+            shutil.copy2(original_contigs_path, new_contigs_path)
+            print(f"Copied and renamed `contigs.fasta` to `{new_contigs_name}` in {folder_name}")
+        else:
+            print(f"`contigs.fasta` not found in {folder_name}")
+
+======================================================================================================================
+import os
+import shutil
+
+# Define the base directory containing all `spades_output_FG_31XX` folders
+base_dir = "path/to/your/base_directory"  # 이 경로를 자신의 base directory로 변경하세요
+
+# Define the target directory where you want to move all `.fasta` files
+target_dir = os.path.join(base_dir, "assemble_fasta")
+
+# `assemble_fasta` 디렉토리가 없으면 생성합니다
+os.makedirs(target_dir, exist_ok=True)
+
+# Loop through each folder in the base directory
+for folder_name in os.listdir(base_dir):
+    # Check if the folder name starts with 'spades_output_FG_31' or 'spades_output_FG_32'
+    if folder_name.startswith("spades_output_FG_31") or folder_name.startswith("spades_output_FG_32"):
+        folder_path = os.path.join(base_dir, folder_name)
+        
+        # Define the path to the renamed `.fasta` file
+        fasta_file_path = os.path.join(folder_path, f"{folder_name}.fasta")
+        
+        # Check if the `.fasta` file exists
+        if os.path.exists(fasta_file_path):
+            # Define the new path in the `assemble_fasta` directory
+            new_fasta_path = os.path.join(target_dir, f"{folder_name}.fasta")
+            
+            # Move the `.fasta` file to `assemble_fasta` directory
+            shutil.move(fasta_file_path, new_fasta_path)
+            print(f"Moved `{folder_name}.fasta` to `assemble_fasta` directory.")
+        else:
+            print(f"`{folder_name}.fasta` not found in {folder_name}")
+
+======================================================================================================================
+
+import os
+
+# Define the path to the `assemble_fasta` directory
+assemble_fasta_dir = "path/to/your/assemble_fasta"  # 실제 assemble_fasta 디렉토리 경로로 변경하세요
+
+# Loop through each file in the `assemble_fasta` directory
+for filename in os.listdir(assemble_fasta_dir):
+    # Check if the filename starts with 'spades_output_'
+    if filename.startswith("spades_output_"):
+        # Create the new filename by removing 'spades_output_' from the filename
+        new_filename = filename.replace("spades_output_", "")
+        
+        # Define the full path for the old and new file names
+        old_file_path = os.path.join(assemble_fasta_dir, filename)
+        new_file_path = os.path.join(assemble_fasta_dir, new_filename)
+        
+        # Rename the file
+        os.rename(old_file_path, new_file_path)
+        print(f"Renamed `{filename}` to `{new_filename}`")
+
+
